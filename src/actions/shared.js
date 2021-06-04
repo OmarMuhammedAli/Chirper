@@ -6,13 +6,11 @@ import {showLoading, hideLoading} from 'react-redux-loading'
 
 const AUTHED_USER = 'tylermcginnis'
 
-export const handleInitialData = () => (dispatch) => {
+export const handleInitialData = () => async (dispatch) => {
     dispatch(showLoading())
-    return getInitialData()
-        .then(({users, tweets}) => {
-            dispatch(receiveUsers(users))
-            dispatch(receiveTweets(tweets))
-            dispatch(setAuthedUser(AUTHED_USER))
-            dispatch(hideLoading())
-        })
+    const { users, tweets } = await getInitialData()
+    dispatch(receiveUsers(users))
+    dispatch(receiveTweets(tweets))
+    dispatch(setAuthedUser(AUTHED_USER))
+    dispatch(hideLoading())
 }
