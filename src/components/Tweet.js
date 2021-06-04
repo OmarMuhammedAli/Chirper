@@ -4,8 +4,15 @@ import { formatTweet, formatDate } from "../utils/helpers";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { TiHeartOutline } from "react-icons/ti";
 import { TiHeartFullOutline } from "react-icons/ti";
+import {handleToggleTweet} from '../actions/tweets'
 
 class Tweet extends Component {
+  handleLike = (e) => {
+    e.preventDefault();
+    const {dispatch, tweet, authedUser} = this.props
+    const {id, hasLiked} = tweet
+    dispatch(handleToggleTweet({id, hasLiked, authedUser}))
+  };
   toParent = (e, id) => {
     e.preventDefault();
     // Redirect to parent tweet
@@ -17,16 +24,8 @@ class Tweet extends Component {
       return <p>This Tweet doesn't exist!</p>;
     }
 
-    const {
-      name,
-      avatar,
-      timestamp,
-      text,
-      hasLiked,
-      likes,
-      replies,
-      parent,
-    } = tweet;
+    const { name, avatar, timestamp, text, hasLiked, likes, replies, parent } =
+      tweet;
     return (
       <div className="tweet">
         <img src={avatar} alt={`Avatar of ${name}`} className="avatar" />
@@ -47,7 +46,7 @@ class Tweet extends Component {
           <div className="tweet-icons">
             <TiArrowBackOutline className="tweet-icon" />
             <span>{replies !== 0 && replies}</span>
-            <button className="heart-button" onClick={(e) => this.handleLike}>
+            <button className="heart-button" onClick={this.handleLike}>
               {hasLiked ? (
                 <TiHeartFullOutline color="#e0245e" className="tweet-icon" />
               ) : (
