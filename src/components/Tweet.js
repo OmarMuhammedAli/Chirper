@@ -4,6 +4,7 @@ import { formatTweet, formatDate } from "../utils/helpers";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { TiHeartOutline } from "react-icons/ti";
 import { TiHeartFullOutline } from "react-icons/ti";
+import {Link, withRouter} from 'react-router-dom'
 import {handleToggleTweet} from '../actions/tweets'
 
 class Tweet extends Component {
@@ -15,7 +16,7 @@ class Tweet extends Component {
   };
   toParent = (e, id) => {
     e.preventDefault();
-    // Redirect to parent tweet
+    this.props.history.push(`/tweets/${id}`)
   };
   render() {
     const { tweet } = this.props;
@@ -27,7 +28,7 @@ class Tweet extends Component {
     const { name, avatar, timestamp, text, hasLiked, likes, replies, parent } =
       tweet;
     return (
-      <div className="tweet">
+      <Link to={`/tweets/${this.props.id}`} className="tweet">
         <img src={avatar} alt={`Avatar of ${name}`} className="avatar" />
         <div className="tweet-info">
           <div>
@@ -44,6 +45,7 @@ class Tweet extends Component {
             <p>{text}</p>
           </div>
           <div className="tweet-icons">
+            
             <TiArrowBackOutline className="tweet-icon" />
             <span>{replies !== 0 && replies}</span>
             <button className="heart-button" onClick={this.handleLike}>
@@ -56,7 +58,7 @@ class Tweet extends Component {
             <span>{likes !== 0 && likes}</span>
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
 }
@@ -71,4 +73,4 @@ const mapStateToProps = ({ tweets, users, authedUser }, { id }) => {
     authedUser,
   };
 };
-export default connect(mapStateToProps)(Tweet);
+export default withRouter(connect(mapStateToProps)(Tweet));
